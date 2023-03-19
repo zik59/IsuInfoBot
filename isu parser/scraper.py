@@ -1,13 +1,15 @@
 import csv
 import os
 import time
+import logging
 
 import requests
 from dotenv import load_dotenv
 from lxml import html
 
-
 load_dotenv()
+
+logging.basicConfig(filename="scraper.log", filemode='w', level=logging.INFO)
 
 login_url = "https://isu.smtu.ru/login/"
 
@@ -27,7 +29,7 @@ hidden_input = tree.xpath("//input[@name='form_num']/@value")
 payload = {
     'form_num': hidden_input,
     'login': os.getenv("LOGIN", ""),
-    'password': os.getenv("PASSWORD", "")'
+    'password': os.getenv("PASSWORD", "")
 }
 
 result = session_requests.post(login_url, data=payload, headers=headers)
@@ -57,7 +59,7 @@ def filter_name(elem):
             return elem.isalnum()
 
 # По каждому номеру отправляем запросик 
-file_name = '/home/zik/Desktop/Python/IsuInfo/students.csv'
+file_name = 'isuInfo/students.csv'
 with open(file_name, 'w', newline='') as csvfile:
     writer = csv.writer(csvfile, delimiter=' ',
                             quotechar='|', quoting=csv.QUOTE_ALL)
@@ -65,10 +67,9 @@ with open(file_name, 'w', newline='') as csvfile:
     all_groups = sorted(list(set(all_groups)))
     for group in all_groups:
         url = f'https://isu.smtu.ru/students_groups_card_view/{group}/'
-        print(url)
         response = session_requests.get(url, headers=headers)
         htmlElem = html.document_fromstring(response.content)
-        print(response.status_code)
+        logging.info([group, response.status_code])
 
         studentsX = htmlElem.find_class("gradeX")
         studentsA = htmlElem.find_class("gradeA")
