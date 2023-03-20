@@ -22,7 +22,7 @@ def get_group_by_name(name: str):
         groups = []
 
         for row in curs.fetchall():
-            if row[1].startswith(name):
+            if name in row[1]:
                 groups.append(row[0])
         return groups
 
