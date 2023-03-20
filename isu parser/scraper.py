@@ -63,7 +63,7 @@ file_name = 'isuInfo/students.csv'
 with open(file_name, 'w', newline='') as csvfile:
     writer = csv.writer(csvfile, delimiter=' ',
                             quotechar='|', quoting=csv.QUOTE_ALL)
-    writer.writerow(['Номер в списке', 'Номер группы', 'ФИО'])
+
     all_groups = sorted(list(set(all_groups)))
     for group in all_groups:
         url = f'https://isu.smtu.ru/students_groups_card_view/{group}/'
