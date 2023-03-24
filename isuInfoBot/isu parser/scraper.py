@@ -7,9 +7,12 @@ import requests
 from dotenv import load_dotenv
 from lxml import html
 
+
 load_dotenv()
 
 logging.basicConfig(filename="scraper.log", filemode='w', level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 
 login_url = "https://isu.smtu.ru/login/"
 
@@ -69,7 +72,7 @@ with open(file_name, 'w', newline='') as csvfile:
         url = f'https://isu.smtu.ru/students_groups_card_view/{group}/'
         response = session_requests.get(url, headers=headers)
         htmlElem = html.document_fromstring(response.content)
-        logging.info([group, response.status_code])
+        logger.info([group, response.status_code])
 
         studentsX = htmlElem.find_class("gradeX")
         studentsA = htmlElem.find_class("gradeA")

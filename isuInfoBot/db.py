@@ -1,8 +1,10 @@
 import sqlite3
 import csv
 
+import config
 
-conn = sqlite3.connect('isuInfo/db.sqlite3')
+
+conn = sqlite3.connect(config.SQLITE_DB_FILE)
 cursor = conn.cursor()
 
 cursor.execute(

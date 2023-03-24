@@ -1,7 +1,10 @@
 import sqlite3
 
+import config
 
-database = "isuInfo/db.sqlite3"
+
+database = config.SQLITE_DB_FILE
+
 
 def create_connection(db_file):
     conn = None
