@@ -2,7 +2,7 @@ import logging
 
 from aiogram import Bot, Dispatcher, executor
 
-import config, handlers
+from isu_info_bot import config, handlers
 
 
 COMMAND_HANDLERS = {

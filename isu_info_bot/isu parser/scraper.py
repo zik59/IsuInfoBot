@@ -4,11 +4,9 @@ import time
 import logging
 
 import requests
-from dotenv import load_dotenv
 from lxml import html
 
-
-load_dotenv()
+from isu_info_bot import config
 
 logging.basicConfig(filename="scraper.log", filemode='w', level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -31,8 +29,8 @@ hidden_input = tree.xpath("//input[@name='form_num']/@value")
 # Авторизуемся очередным запросом
 payload = {
     'form_num': hidden_input,
-    'login': os.getenv("LOGIN", ""),
-    'password': os.getenv("PASSWORD", "")
+    'login': config.LOGIN,
+    'password': config.PASSWORD
 }
 
 result = session_requests.post(login_url, data=payload, headers=headers)
