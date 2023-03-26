@@ -1,1 +1,3 @@
-{{students}}
+{% for isu_group, students in students.items() %}
+{{isu_group}}: {{students}}
+{% endfor %}

@@ -10,9 +10,9 @@ cursor = conn.cursor()
 cursor.execute(
     '''
     CREATE TABLE IF NOT EXISTS students (
-    order_in_isu_list INT,
-    isu_group INT,
-    full_name TEXT
+    variant VARCHAR(2),
+    isu_group VARCHAR(10),
+    name VARCHAR(70)
     )
     '''
     )
@@ -21,7 +21,7 @@ cursor.execute("DELETE FROM students")
 
 conn.commit()
 
-file_name = 'isuInfo/students.csv'
+file_name = str(config.BASE_DIR) + '/students.csv'
 
 with open(file_name, 'r', encoding='utf-8', newline='') as csv_file:
     data_reader = csv.reader(csv_file, delimiter=" ", quotechar='|')
