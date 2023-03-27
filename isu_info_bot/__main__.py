@@ -1,6 +1,8 @@
 import logging
+import re
 
 from aiogram import Bot, Dispatcher, executor
+from aiogram.dispatcher.filters import Regexp
 
 from isu_info_bot import config, handlers
 
@@ -10,6 +12,11 @@ COMMAND_HANDLERS = {
     'help': handlers.help_,
     'group': handlers.show_group_by_name,
     'variant': handlers.variant
+}
+
+CALLBACK_QUERY_HANDLERS = {
+    rf"^{config.VARIANT_CALLBACK_PATTERN}(\d+).": handlers.variant_button,
+    rf"^{config.GROUP_CALLBACK_PATTERN}(\d+).": handlers.group_button
 }
 
 logging.basicConfig(
@@ -31,6 +38,9 @@ def main():
     for command_name, command_handler in COMMAND_HANDLERS.items():
         dp.register_message_handler(command_handler, commands=[command_name])
 
+    for pattern, handler in CALLBACK_QUERY_HANDLERS.items():
+        dp.register_callback_query_handler(handler, Regexp(regexp=pattern).check)
+    
     executor.start_polling(dp, skip_updates=True)
 
 

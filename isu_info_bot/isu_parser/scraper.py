@@ -28,8 +28,7 @@ def start_session() -> Session:
 
 
 def get_hidden_input(session: Session, url: str, headers: dict) -> str:
-    response = session.get(url, headers=headers)
-    tree = html.fromstring(response.text)
+    tree = make_tree(session, url, headers)
     hidden_input = tree.xpath("//input[@name='form_num']/@value")
     return hidden_input
 
@@ -44,22 +43,16 @@ def login(session: Session, url: str, headers: dict) -> None:
 
 
 def get_list_of_groups(session: Session, url: str, headers: dict) -> list:
-    response = session.get(url, headers=headers)
-    tree = html.fromstring(response.text)
+    tree = make_tree(session, url, headers)
     all_groups = tree.xpath('//a[@class="toggle-vis btn btn-default black"]/text()')
     return all_groups
 
 
 def get_list_of_students_in_group(session: Session, url: str, headers:dict) -> list:
-    response = session.get(url, headers=headers)
-    tree = html.fromstring(response.text)
+    tree = make_tree(session, url, headers)
     students_in_group = tree.xpath('//tr[@class="gradeX"]//td[last()]/text()')
     students_in_group.extend(tree.xpath('//tr[@class="gradeA"]//td[last()]/text()'))
-
-    for i in range(len(students_in_group)):
-        students_in_group[i] = ''.join(filter(filter_name, students_in_group[i]))
-    students_in_group = list(filter(None, students_in_group))
-
+    filter_list(students_in_group)
     return sorted(students_in_group)
 
 
@@ -77,6 +70,18 @@ def get_all_students(session: Session, headers:dict, all_groups: list) -> dict:
         time.sleep(1)
 
     return all_students
+
+
+def make_tree(session: Session, url: str, headers: dict):
+    response = session.get(url, headers=headers)
+    tree = html.fromstring(response.text)
+    return tree
+
+
+def filter_list(students_in_group: list) -> None:
+    for i in range(len(students_in_group)):
+        students_in_group[i] = ''.join(filter(filter_name, students_in_group[i]))
+    students_in_group = list(filter(None, students_in_group))
 
 
 def filter_name(elem: str) -> bool:
