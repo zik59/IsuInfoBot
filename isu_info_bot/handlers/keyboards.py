@@ -1,7 +1,4 @@
-from aiogram import types
 from aiogram.types.inline_keyboard import InlineKeyboardButton, InlineKeyboardMarkup
-
-from isu_info_bot import config
 
 
 def get_pagination_keyboard(

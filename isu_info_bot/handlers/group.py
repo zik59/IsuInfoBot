@@ -1,17 +1,19 @@
 from aiogram import types
 
+from isu_info_bot import config
 from isu_info_bot.handlers.keyboards import get_pagination_keyboard, get_current_page_index
 from isu_info_bot.services.students import get_group_by_name
 from isu_info_bot.templates import render_template
-
-from isu_info_bot import config
 
 
 async def show_group_by_name(message: types.Message):
     name = " ".join(message.text.split()[1:])
     pages = get_group_by_name(name)
-    await message.answer(render_template('group.j2', {'groups': pages[1]}),
-        reply_markup=get_pagination_keyboard(1, len(pages), config.GROUP_CALLBACK_PATTERN, name))
+    if len(pages) > 1:
+        await message.answer(render_template('group.j2', {'groups': pages[1]}),
+            reply_markup=get_pagination_keyboard(1, len(pages), config.GROUP_CALLBACK_PATTERN, name))
+    else:
+        await message.answer(render_template('group.j2', {'groups': pages[1]}))
 
 
 async def group_button(query: types.CallbackQuery):

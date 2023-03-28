@@ -8,7 +8,7 @@ from isu_info_bot import config
 database = config.SQLITE_DB_FILE
 
 
-def get_group_by_name(student_name: str) -> list:
+def get_group_by_name(student_name: str) -> dict:
     conn = _create_connection(database)
     with conn:
         curs = conn.cursor()
@@ -17,10 +17,10 @@ def get_group_by_name(student_name: str) -> list:
         groups = {}
 
         for isu_group, name in curs.fetchall():
-            if student_name in name:
+            if student_name.lower() in name.lower():
                 groups[isu_group] = name
-        pages = _paginate_dict(groups)
-        return pages
+
+        return _paginate_dict(groups)
 
 
 def get_students_by_variant(variant: str, faculty: Optional[str]=None, course: Optional[str]=None) -> dict:
@@ -28,20 +28,21 @@ def get_students_by_variant(variant: str, faculty: Optional[str]=None, course: O
     with conn:
         curs = conn.cursor()
         curs.execute("SELECT variant, isu_group, name FROM students")
-        
-        students = {}
+            
         pattern = 'М?{faculty}{course}[0-9]{{2}}$'.format(faculty=faculty or '\d', course=course or '\d')
+        students = {}
+
         for var, isu_group, name in curs.fetchall():
             if var == variant and re.fullmatch(pattern, isu_group):
                     students[isu_group] = name
-        pages = _paginate_dict(students)
-        return pages
+
+        return _paginate_dict(students)
 
 
-def _paginate_dict(dict_name: dict) -> dict:
+def _paginate_dict(dictionary: dict) -> dict:
     pages = {}
     i = 1
-    for item in dict_name.items():
+    for item in dictionary.items():
         if not pages.get(i):
             pages[i] = {}
         pages[i].update({item[0]:item[1]})

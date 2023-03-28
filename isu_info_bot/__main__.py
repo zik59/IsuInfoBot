@@ -1,5 +1,4 @@
 import logging
-import re
 
 from aiogram import Bot, Dispatcher, executor
 from aiogram.dispatcher.filters import Regexp
@@ -41,6 +40,8 @@ def main():
     for pattern, handler in CALLBACK_QUERY_HANDLERS.items():
         dp.register_callback_query_handler(handler, Regexp(regexp=pattern).check)
     
+    dp.register_message_handler(handlers.process_any_message)
+
     executor.start_polling(dp, skip_updates=True)
 
 

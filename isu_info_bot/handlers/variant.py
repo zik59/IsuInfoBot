@@ -9,8 +9,11 @@ from isu_info_bot.templates import render_template
 async def variant(message: types.Message):
     args = message.text.split()[1:4]
     pages = get_students_by_variant(*args)
-    await message.answer(render_template('variant.j2',{"students": pages[1]}), 
-        reply_markup=get_pagination_keyboard(1, len(pages), config.VARIANT_CALLBACK_PATTERN, args))
+    if len(pages) > 1:
+        await message.answer(render_template('variant.j2',{"students": pages[1]}), 
+            reply_markup=get_pagination_keyboard(1, len(pages), config.VARIANT_CALLBACK_PATTERN, args))
+    else:
+        await message.answer(render_template('variant.j2',{"students": pages[1]}))
 
 
 async def variant_button(query: types.CallbackQuery):
