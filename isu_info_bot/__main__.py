@@ -19,7 +19,8 @@ CALLBACK_QUERY_HANDLERS = {
 }
 
 logging.basicConfig(
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    level=logging.INFO
 )
 logger = logging.getLogger(__name__)
 
@@ -39,7 +40,7 @@ def main():
 
     for pattern, handler in CALLBACK_QUERY_HANDLERS.items():
         dp.register_callback_query_handler(handler, Regexp(regexp=pattern).check)
-    
+
     dp.register_message_handler(handlers.process_any_message)
 
     executor.start_polling(dp, skip_updates=True)

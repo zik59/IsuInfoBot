@@ -14,4 +14,7 @@ db.sqlite3
 venv
 
 # Логи
-scraper.log
+logs
+
+# Картинки
+isu_person

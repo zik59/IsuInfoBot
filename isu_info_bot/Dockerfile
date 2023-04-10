@@ -6,3 +6,4 @@ COPY requirements.txt /code
 RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
 COPY . /code
+CMD ["python3", "/code/__main__.py"]

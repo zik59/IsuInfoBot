@@ -11,8 +11,8 @@ LOGIN = os.getenv("LOGIN", "")
 PASSWORD = os.getenv("PASSWORD", "")
 
 BASE_DIR = Path(__file__).resolve().parent
-SQLITE_DB_FILE = BASE_DIR / "db.sqlite3"
 TEMPLATES_DIR = BASE_DIR / "templates"
+SQLITE_DB_FILE = BASE_DIR/"db.sqlite3"
 
 PAGE_SIZE = 10
 

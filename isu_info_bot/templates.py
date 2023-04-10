@@ -5,7 +5,7 @@ import jinja2
 from isu_info_bot import config
 
 
-def render_template(template_name: str, data: Optional[dict]=None) -> str:
+def render_template(template_name: str, data: Optional[dict] = None) -> str:
     if data is None:
         data = {}
     template = _get_template_env().get_template(template_name)
