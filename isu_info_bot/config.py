@@ -12,9 +12,9 @@ PASSWORD = os.getenv("PASSWORD", "")
 
 BASE_DIR = Path(__file__).resolve().parent
 TEMPLATES_DIR = BASE_DIR / "templates"
-SQLITE_DB_FILE = BASE_DIR/"db.sqlite3"
 
 PAGE_SIZE = 10
 
-VARIANT_CALLBACK_PATTERN = "variant_"
 GROUP_CALLBACK_PATTERN = "group_"
+STUDENT_CALLBACK_PATTERN = "student_"
+VARIANT_CALLBACK_PATTERN = "variant_"

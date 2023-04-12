@@ -17,6 +17,7 @@ magic-filter==1.0.9
 MarkupSafe==2.1.2
 mccabe==0.7.0
 multidict==6.0.4
+Pillow==9.5.0
 pycodestyle==2.10.0
 pyflakes==3.0.1
 python-dotenv==1.0.0

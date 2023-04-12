@@ -1,4 +1,4 @@
-from aiogram.types.inline_keyboard import InlineKeyboardButton, InlineKeyboardMarkup
+from aiogram.types.inline_keyboard import InlineKeyboardMarkup, InlineKeyboardButton
 
 
 def get_pagination_keyboard(

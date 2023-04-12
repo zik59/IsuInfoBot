@@ -9,13 +9,15 @@ from isu_info_bot import config, handlers
 COMMAND_HANDLERS = {
     'start': handlers.start,
     'help': handlers.help_,
-    'group': handlers.show_group_by_name,
-    'variant': handlers.variant
+    'group': handlers.group,
+    'variant': handlers.variant,
+    'student': handlers.student
 }
 
 CALLBACK_QUERY_HANDLERS = {
     rf"^{config.VARIANT_CALLBACK_PATTERN}(\d+).": handlers.variant_button,
-    rf"^{config.GROUP_CALLBACK_PATTERN}(\d+).": handlers.group_button
+    rf"^{config.GROUP_CALLBACK_PATTERN}(\d+).": handlers.group_button,
+    rf"^{config.STUDENT_CALLBACK_PATTERN}(\d+).": handlers.student_button,
 }
 
 logging.basicConfig(
