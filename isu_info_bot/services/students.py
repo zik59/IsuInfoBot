@@ -1,3 +1,4 @@
+import difflib
 import re
 from typing import Optional
 
@@ -46,11 +47,15 @@ async def get_students_by_name(student_name: str) -> dict:
                                           students_table.c.name,
                                           students_table.c.image))
         students = {}
-
-        for isu_group, name, image in query.fetchall():
+        threshold = 0.8
+        bro = query.fetchall()
+        for isu_group, name, image in bro:
             if student_name.lower() in name.lower():
                 students[isu_group] = name, image
-
+        if not students:
+            for isu_group, name, image in bro:
+                if similarity(student_name, name[:len(student_name)]) > threshold:
+                    students[isu_group] = name, image
         return _paginate_dict(students)
 
 
@@ -64,7 +69,8 @@ async def get_students_by_variant(variant: str, faculty: Optional[str] = None, c
 
         students = {}
         for isu_group, name, image in query.fetchall():
-            students[isu_group] = name, image
+            if re.fullmatch(pattern, isu_group):
+                students[isu_group] = name, image
 
         return _paginate_dict(students)
 
@@ -79,3 +85,7 @@ def _paginate_dict(dictionary: dict) -> dict:
         if len(pages[i]) == config.PAGE_SIZE:
             i += 1
     return pages
+
+
+def similarity(word1, word2):
+    return difflib.SequenceMatcher(a=word1.lower(), b=word2.lower()).ratio()
