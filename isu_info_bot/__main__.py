@@ -1,23 +1,17 @@
 import logging
 
 from aiogram import Bot, Dispatcher, executor
-from aiogram.dispatcher.filters import Regexp
+from aiogram.contrib.fsm_storage.redis import RedisStorage2
 
 from isu_info_bot import config, handlers
+from isu_info_bot.handlers.variant import register_handlers_variant
+from isu_info_bot.handlers.group import register_handlers_group
+from isu_info_bot.handlers.student import register_handlers_student
 
 
 COMMAND_HANDLERS = {
     'start': handlers.start,
     'help': handlers.help_,
-    'group': handlers.group,
-    'variant': handlers.variant,
-    'student': handlers.student
-}
-
-CALLBACK_QUERY_HANDLERS = {
-    rf"^{config.VARIANT_CALLBACK_PATTERN}(\d+).": handlers.variant_button,
-    rf"^{config.GROUP_CALLBACK_PATTERN}(\d+).": handlers.group_button,
-    rf"^{config.STUDENT_CALLBACK_PATTERN}(\d+).": handlers.student_button,
 }
 
 logging.basicConfig(
@@ -35,13 +29,13 @@ if not config.TELEGRAM_BOT_TOKEN:
 
 def main():
     bot = Bot(token=config.TELEGRAM_BOT_TOKEN)
-    dp = Dispatcher(bot)
-
+    storage = RedisStorage2()
+    dp = Dispatcher(bot, storage=storage)
+    register_handlers_variant(dp)
+    register_handlers_group(dp)
+    register_handlers_student(dp)
     for command_name, command_handler in COMMAND_HANDLERS.items():
         dp.register_message_handler(command_handler, commands=[command_name])
-
-    for pattern, handler in CALLBACK_QUERY_HANDLERS.items():
-        dp.register_callback_query_handler(handler, Regexp(regexp=pattern).check)
 
     dp.register_message_handler(handlers.process_any_message)
 
