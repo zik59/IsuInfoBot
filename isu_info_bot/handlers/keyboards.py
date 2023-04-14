@@ -1,4 +1,19 @@
 from aiogram.types.inline_keyboard import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types.reply_keyboard import ReplyKeyboardMarkup, KeyboardButton
+
+
+def get_faculty_keyboard() -> ReplyKeyboardMarkup:
+    keyboard = [
+        [KeyboardButton('фкио'), KeyboardButton('машфак'), KeyboardButton('фмп')],
+        [KeyboardButton('экономфак'), KeyboardButton('специалитет фкио, машфака и фмп'), KeyboardButton('специалитет фкио')],
+        [KeyboardButton('фенго'), KeyboardButton('колледж'), KeyboardButton('аспирантура')]
+    ]
+    return ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
+
+
+def get_cancellation_keyboard() -> ReplyKeyboardMarkup:
+    cancel = [[KeyboardButton('Отмена')]]
+    return ReplyKeyboardMarkup(cancel, resize_keyboard=True)
 
 
 def get_pagination_keyboard(

@@ -4,15 +4,17 @@ from aiogram import Bot, Dispatcher, executor
 from aiogram.contrib.fsm_storage.redis import RedisStorage2
 
 from isu_info_bot import config, handlers
-from isu_info_bot.handlers.variant import register_handlers_variant
-from isu_info_bot.handlers.group import register_handlers_group
-from isu_info_bot.handlers.student import register_handlers_student
 
 
-COMMAND_HANDLERS = {
-    'start': handlers.start,
-    'help': handlers.help_,
-}
+REGISTER = [
+    handlers.register_handlers_cancel,
+    handlers.register_handlers_help,
+    handlers.register_handlers_start,
+    handlers.register_handlers_variant,
+    handlers.register_handlers_group,
+    handlers.register_handlers_student,
+    handlers.register_handlers_process_any
+]
 
 logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
@@ -27,18 +29,16 @@ if not config.TELEGRAM_BOT_TOKEN:
     )
 
 
+def register_all_handlers(dp: Dispatcher) -> None:
+    for elem in REGISTER:
+        elem(dp)
+
+
 def main():
     bot = Bot(token=config.TELEGRAM_BOT_TOKEN)
     storage = RedisStorage2()
     dp = Dispatcher(bot, storage=storage)
-    register_handlers_variant(dp)
-    register_handlers_group(dp)
-    register_handlers_student(dp)
-    for command_name, command_handler in COMMAND_HANDLERS.items():
-        dp.register_message_handler(command_handler, commands=[command_name])
-
-    dp.register_message_handler(handlers.process_any_message)
-
+    register_all_handlers(dp)
     executor.start_polling(dp, skip_updates=True)
 
 
